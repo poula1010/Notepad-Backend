@@ -7,11 +7,15 @@ import com.pooh.notebook.dto.RegisterDto;
 import com.pooh.notebook.exception.NoteAPIException;
 import com.pooh.notebook.repository.RoleRepository;
 import com.pooh.notebook.repository.UserRepository;
+import com.pooh.notebook.security.JwtTokenProvider;
 import com.pooh.notebook.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +27,12 @@ import java.util.Set;
 public class AuthServiceImpl implements AuthService {
 
     @Autowired
-    public AuthServiceImpl(UserRepository userRepository,RoleRepository roleRepository,PasswordEncoder passwordEncoder,AuthenticationManager authenticationManager){
+    public AuthServiceImpl(UserRepository userRepository,
+                           RoleRepository roleRepository,
+                           PasswordEncoder passwordEncoder,
+                           AuthenticationManager authenticationManager,
+                           JwtTokenProvider jwtTokenProvider){
+        this.jwtTokenProvider = jwtTokenProvider;
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -34,6 +43,7 @@ public class AuthServiceImpl implements AuthService {
     private PasswordEncoder passwordEncoder;
     private AuthenticationManager authenticationManager;
 
+    private JwtTokenProvider jwtTokenProvider;
     @Override
     public String register(RegisterDto registerDto) {
         //check if username already exists
@@ -62,6 +72,14 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String login(LoginDto loginDto) {
-        return null;
+
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                loginDto.getUsernameOrEmail(),loginDto.getPassword()
+        ));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String token = jwtTokenProvider.generateToken(authentication);
+        return token;
     }
 }

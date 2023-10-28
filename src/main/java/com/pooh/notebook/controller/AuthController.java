@@ -1,5 +1,7 @@
 package com.pooh.notebook.controller;
 
+import com.pooh.notebook.dto.JwtAuthResponse;
+import com.pooh.notebook.dto.LoginDto;
 import com.pooh.notebook.dto.RegisterDto;
 import com.pooh.notebook.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +22,17 @@ public class AuthController {
         this.authService = authService;
     }
     @PreAuthorize("permitAll()")
-@PostMapping("/register")
+    @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterDto registerDto){
         String response = authService.register(registerDto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+    @PreAuthorize("permitAll()")
+    @PostMapping("/login")
+    public ResponseEntity<JwtAuthResponse> register(@RequestBody LoginDto loginDto){
+        String token = authService.login(loginDto);
+        JwtAuthResponse jwtAuthResponse= new JwtAuthResponse();
+        jwtAuthResponse.setAccessToken(token);
+        return new ResponseEntity<>(jwtAuthResponse,HttpStatus.OK);
     }
 }

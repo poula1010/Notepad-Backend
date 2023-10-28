@@ -1,5 +1,7 @@
 package com.pooh.notebook.configuration;
 
+import com.pooh.notebook.security.JwtAuthenticationEntryPoint;
+import com.pooh.notebook.security.JwtAuthenticationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableMethodSecurity
@@ -24,6 +27,11 @@ public class SecurityConfiguration {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
     @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -37,6 +45,10 @@ public class SecurityConfiguration {
                     authorize.requestMatchers("/api/auth/**").permitAll();
                     authorize.anyRequest().authenticated();
                 }).httpBasic(Customizer.withDefaults());
+
+        http.exceptionHandling((exception)->
+                                    exception.authenticationEntryPoint(jwtAuthenticationEntryPoint));
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
