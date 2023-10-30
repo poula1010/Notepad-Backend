@@ -1,0 +1,236 @@
+:root {
+  --splitTransitionTime: 0.5s;
+  --splitTransitionCurve: ease-out;
+  --header-purple: #9095c3;
+  --note-mauve: #4A4E74;
+  --border-mauve: #d4cfff;
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
+.split-main {
+  display: grid;
+  height: 100%;
+  grid-template-rows: 1fr;
+  transition-duration: var(--splitTransitionTime);
+  transition-timing-function: var(--splitTransitionCurve);
+  column-gap: 0%;
+}
+
+.split-minimized {
+  grid-template-columns: 0% 1fr;
+}
+
+.split-maximized {
+  grid-template-columns: 20% 1fr;
+}
+
+.split-min-btn {
+  background-color: #6460b53b;
+  position: absolute;
+  transition: left var(--splitTransitionTime) var(--splitTransitionCurve);
+  height: 20%;
+  border-radius: 0;
+  padding: 0px;
+  width: 1.5%;
+  top: 40%;
+  text-align: left;
+  border: black 1px;
+  border-style: solid;
+  border-radius: 6px;
+}
+
+.split-btn-min {
+  left: 0%;
+
+}
+
+.split-btn-max {
+  left: 20%;
+}
+
+.split-left {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  background-color: white;
+  border: black 1px;
+  border-style: solid;
+  color: black;
+  font-family: 'Karla', sans-serif;
+}
+
+.app-title {
+  background-color: var(--header-purple);
+
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 10px;
+  font-size: 24px;
+  font-weight: 600;
+  color: white;
+  border: rgb(70 51 131 / 29%) 1px;
+  border-style: solid;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  flex-direction: row;
+  text-wrap: nowrap;
+}
+
+.form-centerer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 125px;
+  margin-right: 5%;
+}
+
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  width: 40%;
+  min-width: 350px;
+  max-width: 650px;
+  border: #d4cfff 1px solid;
+  font-family: 'Karla', sans-serif;
+  border-radius: 30px;
+}
+
+.form-header {
+  width: 100%;
+  background-color: var(--header-purple);
+  color: white;
+  border-radius: 30px 30px 0px 0px;
+  border-bottom: #d4cfff 1px solid;
+}
+
+.input-box {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.form-body {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  gap: 20px;
+  border-bottom: 1px #d4cfff solid;
+}
+
+.register-span {
+  margin-right: 5px;
+}
+
+.register-link {
+  font-size: 18px;
+}
+
+.form-header h1 {
+  padding-left: 5%;
+  text-shadow: 1px 2px 0px #000000ba;
+}
+
+.input-text {
+  background-color: #f6f0fa86;
+  color: #120023;
+  font-size: large;
+  width: 60%;
+  height: 50px;
+  text-align: left;
+  border-radius: 10px;
+  padding-left: 2%;
+  border-color: #685ac38a;
+
+}
+
+.form-tail {
+  height: 50px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  font-size: 16px;
+}
+
+.submit-btn {
+  width: 25%;
+  font-size: large;
+  margin-bottom: 5%;
+  background-color: #f6f0fa86;
+  border: 1px #685ac38a solid;
+}
+
+.submit-btn:hover {
+  background-color: #efe4f89c;
+}
+
+.input-text::placeholder {
+  color: var(--header-purple);
+}
+
+.input-text:hover {
+  background-color: #efe4f89c;
+}
+
+
+.header-logo {
+  text-align: center;
+  font-size: 30px;
+  margin: 7px 0px 7px 0px;
+}
+
+.split-right {
+  background-color: beige;
+
+}
+
+.text-box {
+  height: 98.1%;
+  width: 95.8%;
+  padding: 1% 2% 1% 2%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
+  background-color: var(--header-purple);
+  padding: 10px;
+  color: white;
+  align-content: center;
+  font-family: 'Karla', sans-serif;
+}
+
+.header div {
+  margin-bottom: 0px;
+  color: wheat;
+  text-align: center;
+}
+
+.note-header {
+  height: 50px;
+  display: flex;
+  padding-left: 10px;
+  align-items: center;
+  border: rgb(70 51 131 / 29%) 1px;
+  border-style: solid;
+  overflow-x: hidden;
+  text-wrap: nowrap;
+  flex-wrap: nowrap;
+}
+
+.active {
+  background-color: var(--note-mauve);
+  color: white
+}
