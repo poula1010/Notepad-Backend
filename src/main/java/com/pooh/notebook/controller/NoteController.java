@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @CrossOrigin("*")
@@ -23,26 +24,42 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/notes")
 public class NoteController {
     private NoteService noteService;
+    private JwtTokenProvider tokenProvider;
     @Autowired
-    public NoteController(NoteService noteService ){
+    public NoteController(NoteService noteService ,JwtTokenProvider jwtTokenProvider){
         this.noteService = noteService;
+        this.tokenProvider = jwtTokenProvider;
     }
     @PostMapping
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<NoteDto>> addNote(@RequestBody String token){
-        List<NoteDto> notes = noteService.addNote(token);
-        return new ResponseEntity<>(notes,HttpStatus.OK);
+    public ResponseEntity<List<NoteDto>> addNote(@RequestHeader Map<String, String> headers){
+        String token;
+        try{
+            token = headers.get("authorizationBearer ");
+            List<NoteDto> notes = noteService.addNote(token);
+            return new ResponseEntity<>(notes,HttpStatus.OK);
+        }
+        catch (Exception e){
+            throw new NoteAPIException(HttpStatus.BAD_REQUEST,"invalid User");
+        }
+
+
     }
     @GetMapping
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<NoteDto>>  getNotes(@RequestBody String token){
-        List<NoteDto> notes = noteService.getNotes(token);
-        return new ResponseEntity<>(notes,HttpStatus.OK);
+    public ResponseEntity<List<NoteDto>>  getNotes(@RequestHeader Map<String, String> headers){
+
+        String token;
+        try{
+            token = headers.get("authorization");
+            token = token.split(" ")[1];
+            List<NoteDto> notes = noteService.getNotes(token);
+            return new ResponseEntity<>(notes,HttpStatus.OK);
+        }
+        catch (Exception e){
+            throw new NoteAPIException(HttpStatus.BAD_REQUEST,"invalid User");
+        }
+
     }
 
-    @PutMapping
-    @PreAuthorize("hasRole('USER')")
-            public Object test(@RequestHeader Object head){
-            return head;
-    }
 }

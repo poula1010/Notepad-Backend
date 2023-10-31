@@ -11,9 +11,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NoteDto {
+    private int id;
     private String body;
 
     public static NoteDto mapToDto(Note note){
-        return new NoteDto(note.getBody());
+        return new NoteDto(note.getId(), note.getBody());
     }
 }
