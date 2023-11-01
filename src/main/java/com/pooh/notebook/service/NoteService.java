@@ -5,6 +5,8 @@ import com.pooh.notebook.dto.NoteDto;
 import java.util.List;
 
 public interface NoteService {
-    public List<NoteDto> addNote(String token);
+    public NoteDto addNote(String token);
     public List<NoteDto> getNotes(String token);
+
+    public void editNote(String token,NoteDto noteDto);
 }

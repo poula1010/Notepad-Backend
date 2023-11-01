@@ -32,12 +32,13 @@ public class NoteController {
     }
     @PostMapping
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<NoteDto>> addNote(@RequestHeader Map<String, String> headers){
+    public ResponseEntity<NoteDto> addNote(@RequestHeader Map<String, String> headers){
         String token;
         try{
-            token = headers.get("authorizationBearer ");
-            List<NoteDto> notes = noteService.addNote(token);
-            return new ResponseEntity<>(notes,HttpStatus.OK);
+            token = headers.get("authorization");
+            token = token.split(" ")[1];
+            NoteDto note = noteService.addNote(token);
+            return new ResponseEntity<>(note,HttpStatus.OK);
         }
         catch (Exception e){
             throw new NoteAPIException(HttpStatus.BAD_REQUEST,"invalid User");
@@ -62,4 +63,9 @@ public class NoteController {
 
     }
 
+//    @PutMapping
+//    @PreAuthorize("hasRole('USER')")
+//    public ResponseEntity<String> editNote(@RequestHeader Map<String,String> headers,NoteDto noteDto){
+//
+//    }
 }
