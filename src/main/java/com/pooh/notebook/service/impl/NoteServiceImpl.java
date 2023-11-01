@@ -55,6 +55,11 @@ public class NoteServiceImpl implements NoteService {
         if(StringUtils.hasText(token)&&tokenProvider.validateToken(token)){
             username = tokenProvider.getUsername(token);
         }
-
+        Note note = noteRepository.findById(noteDto.getId()).orElseThrow();
+        User user = note.getUser();
+        if(user.getUsername().equals(username)){
+            note.setBody(noteDto.getBody());
+            noteRepository.save(note);
+        }
     }
 }

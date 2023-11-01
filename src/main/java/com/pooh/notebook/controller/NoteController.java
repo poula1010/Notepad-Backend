@@ -24,11 +24,10 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/notes")
 public class NoteController {
     private NoteService noteService;
-    private JwtTokenProvider tokenProvider;
+
     @Autowired
-    public NoteController(NoteService noteService ,JwtTokenProvider jwtTokenProvider){
+    public NoteController(NoteService noteService ){
         this.noteService = noteService;
-        this.tokenProvider = jwtTokenProvider;
     }
     @PostMapping
     @PreAuthorize("hasRole('USER')")
@@ -63,9 +62,18 @@ public class NoteController {
 
     }
 
-//    @PutMapping
-//    @PreAuthorize("hasRole('USER')")
-//    public ResponseEntity<String> editNote(@RequestHeader Map<String,String> headers,NoteDto noteDto){
-//
-//    }
+    @PutMapping
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<String> editNote(@RequestHeader Map<String,String> headers,@RequestBody NoteDto noteDto){
+        String token;
+        try{
+            token = headers.get("authorization");
+            token = token.split(" ")[1];
+            noteService.editNote(token,noteDto);
+            return new ResponseEntity<>("Adjusted",HttpStatus.OK);
+        }
+        catch (Exception e){
+            throw new NoteAPIException(HttpStatus.BAD_REQUEST,"invalid User");
+        }
+    }
 }
